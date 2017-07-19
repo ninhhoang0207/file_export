@@ -39,7 +39,7 @@ Export Excel M1a
 				<tbody>
 					<tr>
 						<td>M1</td>
-						<td><a href="{{asset('excel/exports/m1_excel.xls')}}" class="btn btn-success">Tải về<span class="glyphicon glyphicon-download-alt"></span></a></td>
+						<td><a href="{{asset('excel/exports/m1.docx')}}" class="btn btn-success">Tải về<span class="glyphicon glyphicon-download-alt"></span></a></td>
 						<td><a href="{{route('doc.index')}}" class="btn btn-info">Xem <span class="glyphicon glyphicon-eye-open"></span></a>
 						</td>
 						<td><a href="{{route('doc.export')}}" class="btn btn-warning">Export <span class="glyphicon glyphicon-export"></span></a></td>
