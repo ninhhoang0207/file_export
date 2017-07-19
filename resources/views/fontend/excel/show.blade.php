@@ -38,25 +38,39 @@ Export Excel M1a
 				</thead>
 				<tbody>
 					<tr>
+						<td>M1</td>
+						<td><a href="{{asset('excel/exports/m1_excel.xls')}}" class="btn btn-success">Tải về<span class="glyphicon glyphicon-download-alt"></span></a></td>
+						<td><a href="{{route('doc.index')}}" class="btn btn-info">Xem <span class="glyphicon glyphicon-eye-open"></span></a>
+						</td>
+						<td><a href="{{route('doc.export')}}" class="btn btn-warning">Export <span class="glyphicon glyphicon-export"></span></a></td>
+					</tr>
+					<tr>
 						<td>M1a</td>
 						<td><a href="{{asset('excel/exports/m1_excel.xls')}}" class="btn btn-success">Tải về<span class="glyphicon glyphicon-download-alt"></span></a></td>
-						<td><a href="" class="btn btn-info">Xem <span class="glyphicon glyphicon-eye-open"></span></a>
+						<td><a href="{{route('excel.indexA')}}" class="btn btn-info">Xem <span class="glyphicon glyphicon-eye-open"></span></a>
 						</td>
 						<td><a href="{{route('excel.exportA')}}" class="btn btn-warning">Export <span class="glyphicon glyphicon-export"></span></a></td>
 					</tr>
 					<tr>
 						<td>M1b</td>
 						<td><a href="{{asset('excel/exports/m1b_excel.xls')}}" class="btn btn-success">Tải về<span class="glyphicon glyphicon-download-alt"></span></a></td>
-						<td><a href="" class="btn btn-info">Xem <span class="glyphicon glyphicon-eye-open"></span></a>
+						<td><a href="{{route('excel.indexB')}}" class="btn btn-info">Xem <span class="glyphicon glyphicon-eye-open"></span></a>
 						</td>
 						<td><a href="{{route('excel.exportB')}}" class="btn btn-warning">Export <span class="glyphicon glyphicon-export"></span></a></td>
 					</tr>
 					<tr>
 						<td>M1c</td>
 						<td><a href="{{asset('excel/exports/m1c_excel.xls')}}" class="btn btn-success">Tải về<span class="glyphicon glyphicon-download-alt"></span></a></td>
-						<td><a href="" class="btn btn-info">Xem <span class="glyphicon glyphicon-eye-open"></span></a>
+						<td><a href="{{route('excel.indexC')}}" class="btn btn-info">Xem <span class="glyphicon glyphicon-eye-open"></span></a>
 						</td>
 						<td><a href="{{route('excel.exportC')}}" class="btn btn-warning">Export <span class="glyphicon glyphicon-export"></span></a></td>
+					</tr>
+					<tr>
+						<td>M1d</td>
+						<td><a href="{{asset('excel/exports/m1d_excel.xls')}}" class="btn btn-success">Tải về<span class="glyphicon glyphicon-download-alt"></span></a></td>
+						<td><a href="{{route('excel.indexD')}}" class="btn btn-info">Xem <span class="glyphicon glyphicon-eye-open"></span></a>
+						</td>
+						<td><a href="{{route('excel.exportD')}}" class="btn btn-warning">Export <span class="glyphicon glyphicon-export"></span></a></td>
 					</tr>
 				</tbody>
 			</table>		

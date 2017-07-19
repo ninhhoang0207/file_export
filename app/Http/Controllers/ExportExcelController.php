@@ -7,6 +7,7 @@ use Excel;
 use App\ExcelM1aModel;
 use App\ExcelM1bModel;
 use App\ExcelM1cModel;
+use App\ExcelM1dModel;
 use DB;
 
 class ExportExcelController extends Controller
@@ -16,9 +17,8 @@ class ExportExcelController extends Controller
 		return view('fontend.excel.index_a');
 	}
 
-	public function show_a() {
-		$data = ExcelM1aModel::all();
-		return view('fontend.excel.show_a',compact('data'));
+	public function show() {
+		return view('fontend.excel.show');
 	}
 
 	public function index_b() {
@@ -29,8 +29,13 @@ class ExportExcelController extends Controller
 		return view('fontend.excel.index_c');
 	}
 
+	public function index_d() {
+		return view('fontend.excel.index_d');
+	}
+
 	public function post_a(Request $request) {
 		$data = $request->except('_token');
+		dd($data);
 		$save = ExcelM1aModel::create($data);
 	}
 
@@ -392,6 +397,7 @@ class ExportExcelController extends Controller
 		echo "Success";
 	}
 
+
 	public function export_m1c(Request $request) {
 		$selected_field = $this->selected_field_c();
 		$data = ExcelM1cModel::where('id','>',0)->get($selected_field);
@@ -405,17 +411,16 @@ class ExportExcelController extends Controller
 			$data = $data->toArray();
 		else 
 			return 'Data is not found';
-		
-		Excel::Create('m1_excel', function($excel) use($data, $data_header) {
+
+		Excel::Create('m1c_excel', function($excel) use($data, $data_header) {
 			$excel->sheet('sheet_m1c', function($sheet) use($data, $data_header) {
 				$sheet->setOrientation('landscape');
 				$sheet->setFontFamily('Times New Roman');
 				$sheet->setFontSize(12);
 				// $sheet->setFontBold(true);
 				$sheet->setAutoSize(false);
-				$sheet->setBorder('A6:T9');
 				$range = count($data)+7;
-				$sheet->setBorder('A11:J'.$range);
+				$sheet->setBorder('A6:T'.$range);
 				/*
 				Create table
 				*/
@@ -423,10 +428,10 @@ class ExportExcelController extends Controller
 					'ĐƠN VỊ CHỦ QUẢN',
 					));
 				$sheet->appendRow(2, array(
-					'TRUNG TÂM: '.strtoupper($data['tentrungtam']),
+					'TRUNG TÂM: '.strtoupper($data_header['tentrungtam']),
 					));
 				$sheet->appendRow(3, ['BÁO CÁO DANH SÁCH, THÔNG TIN VÀ HỒ SƠ ĐỐI VỚI LAO ĐỘNG NƯỚC NGOÀI CỦA TRUNG TÂM HIỆN ĐANG GIẢNG DẠY TẠI CÁC TRƯỜNG HỌC CỦA HÀ NỘI ']);
-				$sheet->appendRow(4, ['(Kèm theo báo cáo số  '.$data['baocaoso'].' /BC  '.$data['ngay'].' thang  '.$data['thang'].' năm  '.$data['nam'].'  )']);
+				$sheet->appendRow(4, ['(Kèm theo báo cáo số  '.$data_header['baocaoso'].' /BC  '.$data_header['ngay'].' thang  '.$data_header['thang'].' năm  '.$data_header['nam'].'  )']);
 				$sheet->appendRow(6, [
 					'TT',
 					'Họ và tên',
@@ -457,29 +462,29 @@ class ExportExcelController extends Controller
 					'Thông qua đơn vị cung cấp khóa học (Ghi rõ Tên đơn vị)',
 					'Số giờ phân công giảng dạy',
 					]);
-				$sheet->appendRow(9,[
-					'','Tổng',
-					]);
+				// $sheet->appendRow(9,[
+				// 	'','Tổng',
+				// 	]);
 				//Second Table
-				$sheet->appendRow(11, [
-					'TT',
-					'Thông tin về trường tiếp nhận','','','','','','',
-					'Tên GVNN được phân công',
-					'Ghi chú',
-					]);
-				$sheet->appendRow(12, [
-					'',
-					'Tên trường',
-					'Quận/huyện',
-					'Số lớp',
-					'Tổng số hs',
-					'Số tiết học/tháng',
-					'Tỉ lệ % GVNN',
-					'Cơ cấu GVNN',
-					]);
-				$sheet->appendRow(14,[
-					'','Tổng',
-					]);
+				// $sheet->appendRow(11, [
+				// 	'TT',
+				// 	'Thông tin về trường tiếp nhận','','','','','','',
+				// 	'Tên GVNN được phân công',
+				// 	'Ghi chú',
+				// 	]);
+				// $sheet->appendRow(12, [
+				// 	'',
+				// 	'Tên trường',
+				// 	'Quận/huyện',
+				// 	'Số lớp',
+				// 	'Tổng số hs',
+				// 	'Số tiết học/tháng',
+				// 	'Tỉ lệ % GVNN',
+				// 	'Cơ cấu GVNN',
+				// 	]);
+				// $sheet->appendRow(14,[
+				// 	'','Tổng',
+				// 	]);
 				/*
 				Merge Rows and Colums
 				*/
@@ -493,17 +498,17 @@ class ExportExcelController extends Controller
 				$sheet->mergeCells('H6:K6');
 				$sheet->mergeCells('L6:O6');
 				$sheet->mergeCells('P6:S6');
-
-				$sheet->setMergeColumn([
-					'columns'		=>	['A','I','J'],
-					'rows'			=>	[[11,12]],
-					]);
-				$sheet->mergeCells('B11:H11');
+				//Second table
+				// $sheet->setMergeColumn([
+				// 	'columns'		=>	['A','I','J'],
+				// 	'rows'			=>	[[11,12]],
+				// 	]);
+				// $sheet->mergeCells('B11:H11');
 				/*
 				Style Rows and Colums
 				*/
-				$sheet->getStyle('A6:Z30')->getAlignment()->setWrapText(true);
-				$sheet->cell('A4:Z30', function($cell) {
+				$sheet->getStyle('A6:Z'.$range)->getAlignment()->setWrapText(true);
+				$sheet->cell('A4:Z'.$range, function($cell) {
 					$cell->setAlignment('center');
 					$cell->setValignment('center');
 				});
@@ -518,37 +523,128 @@ class ExportExcelController extends Controller
 						'italic'		=>	true,
 						]);
 				});
-				$sheet->cell('B9', function($cell) {
-					$cell->setFont([
-						'bold'		=>	true,
-						]);
-				});
-				
-				$sheet->cell('A11:J12', function($cell) {
-					$cell->setFont([
-						'bold'	=> true,
-						]);
-				});
-				$sheet->cell('B14', function($cell) {
-					$cell->setFont([
-						'bold'	=> true,
-						]);
-				});
+				//Second table
+				// $sheet->cell('A11:J12', function($cell) {
+				// 	$cell->setFont([
+				// 		'bold'	=> true,
+				// 		]);
+				// });
+				// $sheet->cell('B14', function($cell) {
+				// 	$cell->setFont([
+				// 		'bold'	=> true,
+				// 		]);
+				// });
 				/*
 				Insert Data 
 				*/
 				$insert_data = [];
-				array_push($insert_data, $data['hoten'], $data['quoctich']);
-				($data['gioitinh']=='nam')?array_push($insert_data, '1',''):array_push($insert_data, '','1');
-				($data['trinhdo']=='chuyenmon')?array_push($insert_data, '1',''):array_push($insert_data, '','1');
-				array_push($insert_data, $data['sohochieu'], $data['hansudung_hochieu'], $data['sovisa'], $data['hansudung_visa'], $data['so_giayphep'], $data['thoihan_giayphep'], $data['diachi_giayphep'], $data['diachi_cutru'], $data['thoihan_laodong'], $data['tructiep'], $data['tendonvi'], $data['sogiogiangday'], $data['ghichu']);
-				$insert_data2 = array_chunk($data, 22)[1];
-				$insert_data2[0] = '';
-				$sheet->fromArray($insert_data, null, 'B8',false,false);
-				$sheet->appendRow(13, $insert_data2);
+				foreach ($data as $key => $value) {
+					$temp = [];
+					array_push($temp, $key+1, $value['hoten'], $value['quoctich']);
+					($value['gioitinh']=='nam')?array_push($temp, '1',''):array_push($temp, '','1');
+					($value['trinhdo']=='chuyenmon')?array_push($temp, '1',''):array_push($temp, '','1');
+					array_push($temp, 
+						$value['sohochieu'], 
+						$value['hansudung_hochieu'], 
+						$value['sovisa'], 
+						$value['hansudung_visa'], 
+						$value['so_giayphep'], 
+						$value['thoihan_giayphep'], 
+						$value['diachi_giayphep'], 
+						$value['diachi_cutru'], 
+						$value['thoihan_laodong'], 
+						$value['tructiep'], 
+						$value['tendonvi'], 
+						$value['sogiogiangday'], 
+						$value['ghichu']
+						);
+					array_push($insert_data, $temp);
+				}
+				// Second table
+				// $insert_data2 = array_chunk($data, 22)[1];
+				// $insert_data2[0] = '';
+				$sheet->fromArray($insert_data, null, 'A8',false,false);
+				// $sheet->appendRow(13, $insert_data2);
 			});//End of sheet
 		})->store('xls', public_path('excel/exports'));//End of Excel
 		echo "Success";
+	}
+
+	public function post_d(Request $request) {
+		$data = $request->except('_token');
+		$save = ExcelM1dModel::create($data);
+		echo "Success";
+	}
+
+	public function export_m1d() {
+		$selected_field = $this->selected_field_d();
+		$data = ExcelM1dModel::where('id','>',0)->get($selected_field);
+		// $data_header = ::where('id','>',0)->get(['tentrungtam','baocaoso','bc','ngay','thang','nam']);
+		Excel::Create('m1d_excel', function($excel) use($data, $selected_field) {
+			$excel->sheet('sheet_m1d', function($sheet) use($data, $selected_field) {
+				$sheet->setOrientation('landscape');
+				$sheet->setAutoSize(false);
+				$sheet->setFontFamily('Times New Roman');
+				$range = count($data)+2;
+				$sheet->setBorder('A1:J'.$range,'thin');
+				/*
+				//Append Row
+				*/
+				$sheet->appendRow(1,[
+					'TT',
+					'Thông tin về trường tiếp nhận','','','','','','',
+					'Tên GVNN được phân công',
+					'Ghi chú',
+					]);
+				$sheet->appendRow(2,[
+					'',
+					'Tên trường',
+					'Quận/Huyện',
+					'Số lớp',
+					'Tổng số hs',
+					'Số tiết học/tháng',
+					'Tỷ lệ % GVNN',
+					'Cơ cấu GVNN',
+					'Tên GVNN được phân công',
+					]);	
+				/*
+				//Merge row and column
+				*/
+				$sheet->setMergeColumn([
+					'columns'	=>	['A','I','J'],
+					'rows'		=>	[
+						[1,2],
+						]
+					]);
+				$sheet->mergeCells('B1:H1');
+				/*
+				//Style row and column
+				*/
+				$sheet->getStyle('A1:Z'.$range)->getAlignment()->setWrapText(true);
+				$sheet->cells('A1:Z'.$range, function($cell) {
+					$cell->setAlignment('center');
+					$cell->setValignment('center');
+				});
+				$sheet->cells('A1:J2', function($cell) {
+					$cell->setFont([
+						'bold'	=>	true,
+						]);
+				});
+				/*
+				//Insert data
+				*/
+				$insert_data = [];
+				foreach ($data as $key => $value) {
+					$temp = [];
+					array_push($temp, $key+1);
+					foreach ($selected_field as $val) {
+						array_push($temp, $value->$val);
+					}
+					array_push($insert_data, $temp);
+				}
+				$sheet->fromArray($insert_data,null,'A3',false,false);
+			});//End sheet
+		})->store('xls', public_path('excel/exports'));//End Excel
 	}
 
 	private function selected_field_a() {
@@ -608,11 +704,27 @@ class ExportExcelController extends Controller
 			'sovisa',
 			'hansudung_visa',
 			'so_giayphep',
+			'thoihan_giayphep',
+			'diachi_giayphep',
 			'diachi_cutru',
 			'thoihan_laodong',
 			'tructiep',
 			'tendonvi',
 			'sogiogiangday',
+			'ghichu',
+			);
+	}
+
+	private function selected_field_d() {
+		return array(
+			'tentruong',
+			'quanhuyen',
+			'solop',
+			'sohocsinh',
+			'sotiethoc',
+			'tyle_gvnn',
+			'cocau_gvnn',
+			'ten_gvnn',
 			'ghichu',
 			);
 	}

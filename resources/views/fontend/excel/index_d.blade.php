@@ -80,7 +80,7 @@ Export Excel M1a
 							<td><input type="" name="tyle_gvnn"></td>
 						</tr>
 						<tr>
-							<td style="padding-left: 30px"><i>1.7. Cơ cấu GVCN</i></td>
+							<td style="padding-left: 30px"><i>1.7. Cơ cấu GVNN</i></td>
 							<td><input type="" name="cocau_gvnn"></td>
 						</tr>
 						<tr>
@@ -89,7 +89,7 @@ Export Excel M1a
 						</tr>
 						<tr>
 							<td><b>3. Ghi chú:&nbsp</b></td>
-							<td><textarea rows="5" cols="50" name="ghichu2"></textarea></td>
+							<td><textarea rows="5" cols="50" name="ghichu"></textarea></td>
 						</tr>
 					</table>
 				</ul>

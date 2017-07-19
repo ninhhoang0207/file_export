@@ -3,73 +3,85 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\WordM1Model;
 
 class ExportDocController extends Controller
 {
     //
-    public function index( Request $request ) {
-    	return view('fontend.doc.index');
-    }
+	public function index( Request $request ) {
+		return view('fontend.doc.index');
+	}
 
-    public function post(Request $request) {
-    	$data = $request->all();
-    	unset($data['_token']);
+	public function post(Request $request) {
+		$data = $request->except('_token');
+		$save = WordM1Model::create($data);
+		echo "Success";
+	}
 
-    	$phpWord = new \PhpOffice\PhpWord\PhpWord();
-    	/* Note: any element you append to a document must reside inside of a Section. */
+	public function export() {
+		$selected_filed = $this->selected_filed();
+		$data = WordM1Model::where('id',1)->get($selected_filed)->first();
+
+		if (isset($data)) 
+			$data = $data->toArray();
+		else
+			echo "Data is empty";
+
+		$phpWord = new \PhpOffice\PhpWord\PhpWord();
+		/* Note: any element you append to a document must reside inside of a Section. */
 
 		// Adding an empty Section to the document...
-    	$section = $phpWord->addSection();
-    	$section_style = $section->getStyle();
-    	$position =
-    	$section_style->getPageSizeW()
-    	- $section_style->getMarginRight()
-    	- $section_style->getMarginLeft();
-    	$phpWord->addParagraphStyle(
-    		'rightTab',
-    		array('tabs' => array(new \PhpOffice\PhpWord\Style\Tab('right', 9090)))
-    		);
-    	$phpWord->addParagraphStyle(
-    		'leftTab',
-    		array('tabs' => array(new \PhpOffice\PhpWord\Style\Tab('left', 9090)))
-    		);
-    	$phpWord->addParagraphStyle("leftRight", array("tabs" => array(
-    		new \PhpOffice\PhpWord\Style\Tab("right", $position)
-    		)));
-    	$style_1 = array(
-    		'name'	=>	'Times New Roman',
-    		'size'	=>	13,
-    		);
-    	$style_2 = array(
-    		'name'	=>	'Times New Roman',
-    		'size'	=>	13,
-    		'bold'	=>	true,
-    		);
-    	$style_3 = array(
-    		'name'	=>	'Times New Roman',
-    		'size'	=>	12,
-    		);
-    	$style_4 = array(
-    		'name'	=>	'Times New Roman',
-    		'size'	=>	12,
-    		'bold'	=>	true,
-    		);
-    	$style_5 = array(
-    		'name' => 'Times New Roman',
-    		'size' => 12,
-    		'italic' => true
-    		);
-    	$style_6 = array(
-    		'name' 	=> 'Times New Roman',
-    		'size' 	=> 13,
-    		'italic' => true,
-    		'bold'	=>	true,
-    		);
-    	$style_7 = array(
-    		'name' 	=> 'Times New Roman',
-    		'size' 	=> 13,
-    		'italic' => true,
-    		);
+		$section = $phpWord->addSection();
+		$section_style = $section->getStyle();
+		$position =
+		$section_style->getPageSizeW()
+		- $section_style->getMarginRight()
+		- $section_style->getMarginLeft();
+		$phpWord->addParagraphStyle(
+			'rightTab',
+			array('tabs' => array(new \PhpOffice\PhpWord\Style\Tab('right', 9090)))
+			);
+		$phpWord->addParagraphStyle(
+			'leftTab',
+			array('tabs' => array(new \PhpOffice\PhpWord\Style\Tab('left', 9090)))
+			);
+		$phpWord->addParagraphStyle("leftRight", array("tabs" => array(
+			new \PhpOffice\PhpWord\Style\Tab("right", $position)
+			)));
+		$style_1 = array(
+			'name'	=>	'Times New Roman',
+			'size'	=>	13,
+			);
+		$style_2 = array(
+			'name'	=>	'Times New Roman',
+			'size'	=>	13,
+			'bold'	=>	true,
+			);
+		$style_3 = array(
+			'name'	=>	'Times New Roman',
+			'size'	=>	12,
+			);
+		$style_4 = array(
+			'name'	=>	'Times New Roman',
+			'size'	=>	12,
+			'bold'	=>	true,
+			);
+		$style_5 = array(
+			'name' => 'Times New Roman',
+			'size' => 12,
+			'italic' => true
+			);
+		$style_6 = array(
+			'name' 	=> 'Times New Roman',
+			'size' 	=> 13,
+			'italic' => true,
+			'bold'	=>	true,
+			);
+		$style_7 = array(
+			'name' 	=> 'Times New Roman',
+			'size' 	=> 13,
+			'italic' => true,
+			);
 
 		// Adding Text element to the Section having font styled by default...
 		$table = $section->addTable();
@@ -77,9 +89,9 @@ class ExportDocController extends Controller
 		$column_left = $table->addCell(6000);
 		$column_right = $table->addCell(6000);
 		$column_left->addText('ĐƠN VỊ CHỦ QUẢN', $style_1);
-		$text = 'TRUNG TÂM: '.$data['0_0_trungtam'];
+		$text = 'TRUNG TÂM: '.$data['trungtam'];
 		$column_left->addText($text, $style_4);
-		$text = 'Số '.$data['0_0_so'].' /BC '.$data['0_0_bc'];
+		$text = 'Số '.$data['so'].' /BC '.$data['bc'];
 		$column_left->addText($text, $style_3);
 		$column_left->addText('VV  báo cáo tình hình hoạt động', $style_4);
 		$column_left->addText('Trung tâm 6 tháng đầu năm 2017', $style_4);
@@ -87,12 +99,12 @@ class ExportDocController extends Controller
 		$column_right->addText('Cộng hòa Xã hội Chủ nghĩa Việt Nam', $style_3, ['align' => 'center']);
 		$column_right->addText('Độc lập - Tự Do - Hạnh Phúc', $style_2, ['align' => 'center']);
 		$column_right->addText('----------------', $style_3, ['align' => 'center']);
-		$text = 'Hà Nội, Ngày '.$data['0_0_ngay'];
+		$text = 'Hà Nội, Ngày '.$data['ngay'];
 		$column_right->addText($text, $style_5, ['align' => 'center']);
 		$section->addText();
 		$section->addText();
 		$section->addText('Kính gửi: Sở Giáo dục và Đào tạo Hà Nội', $style_2, ['align' => 'center']);
-		$text = 'Thực hiện Công văn số '.$data['0_1_congvanso'].'/SGD&ĐT-GDTX-CN ngày '.$data['0_1_ngay'].' tháng '.$data['0_1_thang'].' năm '.$data['0_1_nam'].' của Sở Giáo dục và Đào tạo Hà Nội về việc báo cáo định kỳ kết quả hoạt động 6 tháng đầu năm 2017 đối với các Trung tâm: giáo dục/đào tạo có vốn ĐTNN;VPĐDGDNN; NN, NN-TH; nghiệp vụ chuyên ngành và các Tổ chức tư vấn du học trên địa bàn Thành phố, Trung tâm '.$data['0_1_trungtam'].' báo cáo tình hình và kết quả hoạt động 6 tháng đầu năm 2017 như sau:';
+		$text = 'Thực hiện Công văn số '.$data['congvanso'].'/SGD&ĐT-GDTX-CN ngày '.$data['congvan_ngay'].' tháng '.$data['congvan_thang'].' năm '.$data['congvan_nam'].' của Sở Giáo dục và Đào tạo Hà Nội về việc báo cáo định kỳ kết quả hoạt động 6 tháng đầu năm 2017 đối với các Trung tâm: giáo dục/đào tạo có vốn ĐTNN;VPĐDGDNN; NN, NN-TH; nghiệp vụ chuyên ngành và các Tổ chức tư vấn du học trên địa bàn Thành phố, Trung tâm '.$data['trungtam2'].' báo cáo tình hình và kết quả hoạt động 6 tháng đầu năm 2017 như sau:';
 		// $section->addText(htmlspecialchars($text), $style_1, ['spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(7)]);
 		$section->addText(htmlspecialchars($text), $style_1, ['spaceBefore ' => 300]);
 		$text = '1- Tính pháp lý của cơ sở';
@@ -102,34 +114,34 @@ class ExportDocController extends Controller
 		$text = 'Giấy chứng nhận đầu tư/đăng ký doanh nghiệp';
 		$section->addText($text, $style_6);
 		$textrun = $section->createTextRun();
-		$text = 'Số: '.$data['1_1_so'].', Ngày cấp: '.$data['1_1_ngaycap'].', nơi cấp: '.$data['1_1_noicap'];
+		$text = 'Số: '.$data['chungnhan_so'].', Ngày cấp: '.$data['chungnhan_ngaycap'].', nơi cấp: '.$data['chungnhan_noicap'];
 		$section->addText($text, $style_1);
 		$textrun = $section->createTextRun();
 		$text = 'Địa chỉ trụ sở chính: ';
 		$textrun->addText($text, $style_6, ['keepLines'=>true]);
-		$text = $data['1_1_trusochinh'];
+		$text = $data['trusochinh'];
 		$textrun->addText($text, $style_1);
-		$text = 'Điện thoại: '.$data['1_1_dienthoai'].', Fax: '.$data['1_1_fax'].', Email: '.$data['1_1_email1'];
+		$text = 'Điện thoại: '.$data['trusochinh_dienthoai'].', Fax: '.$data['trusochinh_fax'].', Email: '.$data['trusochinh_email'];
 		$section->addText($text, $style_1);
-		$text = 'Website: '.$data['1_1_website'];
+		$text = 'Website: '.$data['trusochinh_website'];
 		$section->addText($text, $style_1);
-		$text = 'Loại hình doanh nghiệp: '.$data['1_1_loaihinhdn'];
+		$text = 'Loại hình doanh nghiệp: '.$data['loaihinhdoanhnghiep'];
 		$section->addText($text, $style_1);
-		$text = 'Thời hạn hoạt động: '.$data['1_1_thoihan'];
+		$text = 'Thời hạn hoạt động: '.$data['thoihan'];
 		$section->addText($text, $style_1);
-		$text = 'Mã số thuế: '.$data['1_1_masothue'];
+		$text = 'Mã số thuế: '.$data['masothue'];
 		$section->addText($text, $style_1);
-		$text = 'Vốn đăng ký/điều lệ: '.$data['1_1_von_dieule'];
+		$text = 'Vốn đăng ký/điều lệ: '.$data['von_dieule'];
 		$section->addText($text, $style_1);
-		$text = 'Vốn góp thực hiện dự án đăng ký/cho Trung tâm: '.$data['1_1_von_trungtam'];
+		$text = 'Vốn góp thực hiện dự án đăng ký/cho Trung tâm: '.$data['von_trungtam'];
 		$section->addText($text, $style_1);
 		$text = 'Người đại diện pháp luật:';
 		$section->addText($text, $style_6);
-		$text = 'Họ và tên: '.$data['1_1_hoten'].', Quốc tịch: '.$data['1_1_quoctich'];
+		$text = 'Họ và tên: '.$data['daidien_hoten'].', Quốc tịch: '.$data['daidien_quoctich'];
 		$section->addText($text, $style_1);
-		$text = 'Điện thoại di đông: '.$data['1_1_dtdd'].', Email liên hệ: '.$data['1_1_email2'];
+		$text = 'Điện thoại di đông: '.$data['daidien_dtdd'].', Email liên hệ: '.$data['daidien_email'];
 		$section->addText($text, $style_1);
-		$text = 'Nơi ở hiện tại: '.$data['1_1_noio'];
+		$text = 'Nơi ở hiện tại: '.$data['daidien_noio'];
 		$section->addText($text, $style_1);
 		$text = '1.2. Thông tin Trung tâm: giáo dục/đào tạo có vốn ĐTNN; NN; NN-TH; nghiệp vụ chuyên ngành, sau đây gọi tắt là Trung tâm.';
 		$section->addText($text, $style_2);
@@ -138,31 +150,31 @@ class ExportDocController extends Controller
 		$textrun->addText($text, $style_6);
 		$text = '(tiếng Việt Nam): ';
 		$textrun->addText($text, $style_7);
-		$text = $data['1_2_tentrungtam_vn'];
+		$text = $data['tentrungtam_vn'];
 		$textrun->addText($text, $style_1);
 		$textrun = $section->createTextRun();
 		$text = '(tiếng Anh, tên giao dịch): ';
 		$textrun->addText($text, $style_7);
-		$text = $data['1_2_tentrungtam_e'];
+		$text = $data['tentrungtam_e'];
 		$textrun->addText($text, $style_1);
 		$text = 'Quyết định cho phép thành lập';
 		$section->addText($text, $style_6);
-		$text = 'Số: '.$data['1_2_thanhlap_so'].' Ngày cấp: '.$data['1_2_thanhlap_ngaycap'].' Nơi cấp: '.$data['1_2_thanhlap_noicap'];
+		$text = 'Số: '.$data['thanhlap_so'].' Ngày cấp: '.$data['thanhlap_ngaycap'].' Nơi cấp: '.$data['thanhlap_noicap'];
 		$section->addText($text, $style_1);
 		$text = 'Quyết định/Chứng nhận cho phép hoạt động';
 		$section->addText($text, $style_6);
-		$text = 'Số: '.$data['1_2_hoatdong_so'].' Ngày cấp: '.$data['1_2_hoatdong_ngaycap'].' Nơi cấp: '.$data['1_2_hoatdong_noicap'];
+		$text = 'Số: '.$data['hoatdong_so'].' Ngày cấp: '.$data['hoatdong_ngaycap'].' Nơi cấp: '.$data['hoatdong_noicap'];
 		$section->addText($text, $style_1);
 		$textrun = $section->createTextRun();
 		$text = 'Giám đốc trung tâm:';
 		$textrun->addText($text, $style_6);
 		$text = '(Ghi rõ từng trung tâm)';
 		$textrun->addText($text, $style_7);
-		$text = 'Họ và tên: '.$data['1_2_gd_hoten'].', Quốc tịch: '.$data['1_2_gd_quoctich'];
+		$text = 'Họ và tên: '.$data['giamdoc_hoten'].', Quốc tịch: '.$data['giamdoc_quoctich'];
 		$section->addText($text, $style_1);
-		$text = 'Điện thoại di động: '.$data['1_2_gd_dienthoai'].', Email liên hệ: '.$data['1_2_gd_email'];
+		$text = 'Điện thoại di động: '.$data['giamdoc_dienthoai'].', Email liên hệ: '.$data['giamdoc_email'];
 		$section->addText($text, $style_1);
-		$text = 'Nơi ở hiện tại: '.$data['1_2_gd_noio'];
+		$text = 'Nơi ở hiện tại: '.$data['giamdoc_noio'];
 		$section->addText($text, $style_1);
 		$textrun = $section->createTextRun();
 		$text = 'Địa chỉ cơ sở đào tạo: ';
@@ -195,11 +207,11 @@ class ExportDocController extends Controller
 		$section->addText($text, $style_2);
 		$text = '2.5. Những khó khăn vướng mắc: ';
 		$section->addText($text, $style_2);
-		$text = $data['2_5_vuongmac'];
+		$text = $data['vuongmac'];
 		$section->addText($text, $style_1);
 		$text = '2.6. Đề xuất, kiến nghị với cơ quan chức năng: ';
 		$section->addText($text, $style_2);
-		$text = $data['2_6_kiennghi'];
+		$text = $data['kiennghi'];
 		$section->addText($text, $style_1);
 		$section->addText();
 		$text = 'Giám đốc';
@@ -209,7 +221,7 @@ class ExportDocController extends Controller
 
 		// Saving the document as OOXML file...
 		$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-		$objWriter->save('helloWorld.docx');
+		$objWriter->save(public_path('doc/exports/m1.docx'));
 
 		// Saving the document as ODF file...
 		// $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'ODText');
@@ -218,18 +230,66 @@ class ExportDocController extends Controller
 		// Saving the document as HTML file...
 		// $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
 		// $objWriter->save('helloWorld.html');
-   }
+	}
 
-   public function test() {
-   	$phpWord = new \PhpOffice\PhpWord\PhpWord();
-   	/* Note: any element you append to a document must reside inside of a Section. */
+	public function selected_filed() {
+		return [
+           'trungtam',
+           'so',
+           'bc',
+           'ngay',
+           'congvanso',
+           'congvan_ngay',
+           'congvan_thang',
+           'congvan_nam',
+           'trungtam2',
+           'chungnhan_so',
+           'chungnhan_ngaycap',
+           'chungnhan_noicap',
+           'trusochinh',
+           'trusochinh_dienthoai',
+           'trusochinh_fax',
+           'trusochinh_email',
+           'trusochinh_website',
+           'loaihinhdoanhnghiep',
+           'thoihan',
+           'masothue',
+           'von_dieule',
+           'von_trungtam',
+           'daidien_hoten',
+           'daidien_quoctich',
+           'daidien_dtdd',
+           'daidien_email',
+           'daidien_noio',
+           'tentrungtam_vn',
+           'tentrungtam_e',
+           'thanhlap_so',
+           'thanhlap_ngaycap',
+           'thanhlap_noicap',
+           'hoatdong_so',
+           'hoatdong_ngaycap',
+           'hoatdong_noicap',
+           'giamdoc_hoten',
+           'giamdoc_quoctich',
+           'giamdoc_dienthoai',
+           'giamdoc_email',
+           'giamdoc_noio',
+           'cosodaotao',
+           'vuongmac',
+           'kiennghi',
+		];
+	}
+
+	public function test() {
+		$phpWord = new \PhpOffice\PhpWord\PhpWord();
+		/* Note: any element you append to a document must reside inside of a Section. */
 
 		// Adding an empty Section to the document...
 		$section = $phpWord->addSection();
 		// Adding Text element to the Section having font styled by default...
-   	$section->addText('"Learn from yesterday, live for today, hope for tomorrow. '
-   		. 'The important thing is not to stop questioning." '
-   		. '(Albert Einstein)');
+		$section->addText('"Learn from yesterday, live for today, hope for tomorrow. '
+			. 'The important thing is not to stop questioning." '
+			. '(Albert Einstein)');
 
 
 		/*
@@ -241,24 +301,24 @@ class ExportDocController extends Controller
 
 		// Adding Text element with font customized inline...
 		$section->addText(
-    	'"Great achievement is usually born of great sacrifice, '
-        . 'and is never the result of selfishness." '
-        . '(Napoleon Hill)',
-    	array('name' => 'Tahoma', 'size' => 10)
-		);
+			'"Great achievement is usually born of great sacrifice, '
+			. 'and is never the result of selfishness." '
+			. '(Napoleon Hill)',
+			array('name' => 'Tahoma', 'size' => 10)
+			);
 
 		// Adding Text element with font customized using named font style...
 		$fontStyleName = 'oneUserDefinedStyle';
 		$phpWord->addFontStyle(
-    	$fontStyleName,
-    	array('name' => 'Tahoma', 'size' => 10, 'color' => '1B2232', 'bold' => true)
-		);
+			$fontStyleName,
+			array('name' => 'Tahoma', 'size' => 10, 'color' => '1B2232', 'bold' => true)
+			);
 		$section->addText(
-    	'"The greatest accomplishment is not in never falling, '
-        . 'but in rising again after you fall." '
-        . '(Vince Lombardi)',
-    	$fontStyleName
-		);
+			'"The greatest accomplishment is not in never falling, '
+			. 'but in rising again after you fall." '
+			. '(Vince Lombardi)',
+			$fontStyleName
+			);
 
 		// Adding Text element with font customized using explicitly created font style object...
 		$fontStyle = new \PhpOffice\PhpWord\Style\Font();
@@ -278,5 +338,5 @@ class ExportDocController extends Controller
 		// Saving the document as HTML file...
 		// $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
 		// $objWriter->save('helloWorld.html');
-   }
+	}
 }

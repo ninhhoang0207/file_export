@@ -15,6 +15,7 @@ class AddWordM1Table extends Migration
     {
         Schema::table('word_m1', function (Blueprint $table) {
             //
+            
         });
     }
 
