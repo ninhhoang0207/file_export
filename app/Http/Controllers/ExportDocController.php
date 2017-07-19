@@ -20,7 +20,7 @@ class ExportDocController extends Controller
 
 	public function export() {
 		$selected_filed = $this->selected_filed();
-		$data = WordM1Model::where('id',1)->get($selected_filed)->first();
+		$data = WordM1Model::where('id',2)->get($selected_filed)->first();
 
 		if (isset($data)) 
 			$data = $data->toArray();
@@ -91,7 +91,7 @@ class ExportDocController extends Controller
 		$column_left->addText('ĐƠN VỊ CHỦ QUẢN', $style_1);
 		$text = 'TRUNG TÂM: '.$data['trungtam'];
 		$column_left->addText($text, $style_4);
-		$text = 'Số '.$data['so'].' /BC '.$data['bc'];
+		$text = 'Số: '.$data['so'].' /BC: '.$data['bc'];
 		$column_left->addText($text, $style_3);
 		$column_left->addText('VV  báo cáo tình hình hoạt động', $style_4);
 		$column_left->addText('Trung tâm 6 tháng đầu năm 2017', $style_4);
@@ -131,9 +131,9 @@ class ExportDocController extends Controller
 		$section->addText($text, $style_1);
 		$text = 'Mã số thuế: '.$data['masothue'];
 		$section->addText($text, $style_1);
-		$text = 'Vốn đăng ký/điều lệ: '.$data['von_dieule'];
+		$text = 'Vốn đăng ký/điều lệ: '.$data['von_dieule'].' VNĐ';
 		$section->addText($text, $style_1);
-		$text = 'Vốn góp thực hiện dự án đăng ký/cho Trung tâm: '.$data['von_trungtam'];
+		$text = 'Vốn góp thực hiện dự án đăng ký/cho Trung tâm: '.$data['von_trungtam'].' VNĐ';
 		$section->addText($text, $style_1);
 		$text = 'Người đại diện pháp luật:';
 		$section->addText($text, $style_6);
@@ -221,7 +221,7 @@ class ExportDocController extends Controller
 
 		// Saving the document as OOXML file...
 		$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-		$objWriter->save(public_path('doc/exports/m1.docx'));
+		$objWriter->save(public_path('word/exports/m1.docx'));
 
 		// Saving the document as ODF file...
 		// $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'ODText');
@@ -290,8 +290,6 @@ class ExportDocController extends Controller
 		$section->addText('"Learn from yesterday, live for today, hope for tomorrow. '
 			. 'The important thing is not to stop questioning." '
 			. '(Albert Einstein)');
-
-
 		/*
 		 * Note: it's possible to customize font style of the Text element you add in three ways:
 		 * - inline;
