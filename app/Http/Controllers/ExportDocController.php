@@ -15,7 +15,8 @@ class ExportDocController extends Controller
 	public function post(Request $request) {
 		$data = $request->except('_token');
 		$save = WordM1Model::create($data);
-		echo "Success";
+		
+		return view('fontend.excel.show');
 	}
 
 	public function export() {
@@ -222,6 +223,10 @@ class ExportDocController extends Controller
 		// Saving the document as OOXML file...
 		$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
 		$objWriter->save(public_path('word/exports/m1.docx'));
+		$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
+		$objWriter->save(resource_path('views/fontend/doc/m1.blade.php'));
+
+		return view('fontend.doc.index_exported');
 
 		// Saving the document as ODF file...
 		// $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'ODText');
@@ -230,6 +235,10 @@ class ExportDocController extends Controller
 		// Saving the document as HTML file...
 		// $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
 		// $objWriter->save('helloWorld.html');
+	}
+
+	public function show () {
+		return view('fontend.doc.m1');
 	}
 
 	public function selected_filed() {

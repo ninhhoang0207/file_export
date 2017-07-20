@@ -15,10 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('','ExportExcelController@show')->name('excel');
+Route::get('','ExportExcelController@show')->name('home');
 Route::get('export-doc-m1','ExportDocController@index')->name('doc.index');
 Route::post('export-doc-m1','ExportDocController@post')->name('doc.post');
 Route::get('do-export-doc-m1','ExportDocController@export')->name('doc.export');
+Route::get('show-doc-m1','ExportDocController@show')->name('doc.show');
 Route::get('export-excel-m1a','ExportExcelController@index_a')->name('excel.indexA');
 Route::post('export-excel-m1a','ExportExcelController@post_a')->name('excel.postA');
 Route::get('do-export-excel-m1a','ExportExcelController@export_m1a')->name('excel.exportA');
@@ -32,3 +33,4 @@ Route::get('do-export-excel-m1c','ExportExcelController@export_m1c')->name('exce
 Route::get('export-excel-m1d','ExportExcelController@index_d')->name('excel.indexD');
 Route::post('export-excel-m1d','ExportExcelController@post_d')->name('excel.postD');
 Route::get('do-export-excel-m1d','ExportExcelController@export_m1d')->name('excel.exportD');
+Route::get('test','ExportExcelController@test');
