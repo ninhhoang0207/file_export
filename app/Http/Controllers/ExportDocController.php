@@ -105,7 +105,7 @@ class ExportDocController extends Controller
 		$section->addText();
 		$section->addText();
 		$section->addText('Kính gửi: Sở Giáo dục và Đào tạo Hà Nội', $style_2, ['align' => 'center']);
-		$text = 'Thực hiện Công văn số '.$data['congvanso'].'/SGD&ĐT-GDTX-CN ngày '.$data['congvan_ngay'].' tháng '.$data['congvan_thang'].' năm '.$data['congvan_nam'].' của Sở Giáo dục và Đào tạo Hà Nội về việc báo cáo định kỳ kết quả hoạt động 6 tháng đầu năm 2017 đối với các Trung tâm: giáo dục/đào tạo có vốn ĐTNN;VPĐDGDNN; NN, NN-TH; nghiệp vụ chuyên ngành và các Tổ chức tư vấn du học trên địa bàn Thành phố, Trung tâm '.$data['trungtam2'].' báo cáo tình hình và kết quả hoạt động 6 tháng đầu năm 2017 như sau:';
+		$text = 'Thực hiện Công văn số '.$data['congvanso'].'/SGD&ĐT-GDTX-CN ngày '.$data['congvan_ngay'].' tháng '.$data['congvan_thang'].' năm '.$data['congvan_nam'].' của Sở Giáo dục và Đào tạo Hà Nội về việc báo cáo định kỳ kết quả hoạt động 6 tháng đầu năm 2017 đối với các Trung tâm: giáo dục/đào tạo có vốn ĐTNN;VPĐDGDNN; NN, NN-TH; nghiệp vụ chuyên ngành và các Tổ chức tư vấn du học trên địa bàn Thành phố, Trung tâm '.$data['trungtam'].' báo cáo tình hình và kết quả hoạt động 6 tháng đầu năm 2017 như sau:';
 		// $section->addText(htmlspecialchars($text), $style_1, ['spaceBefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(7)]);
 		$section->addText(htmlspecialchars($text), $style_1, ['spaceBefore ' => 300]);
 		$text = '1- Tính pháp lý của cơ sở';

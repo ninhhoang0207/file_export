@@ -8,6 +8,8 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 	<!-- Date Time Pikcer CSS -->
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.datetimepicker.css') }}">
+	<!-- Select2 -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 	<!-- JQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
 	<!-- Latest compiled and minified JavaScript -->
@@ -15,6 +17,8 @@
 	<!-- Date Time Picker JS -->
 	<script src="{{ asset('js/jquery.datetimepicker.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('js/jquery.validate.js') }}" type="text/javascript"></script>
+	<!-- Select2 JQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 </head>
 <body>
 	<div class="container">
