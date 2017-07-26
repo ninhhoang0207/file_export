@@ -282,12 +282,13 @@ THÔNG TIN VỀ CƠ SỞ ĐÀO TẠO
 	</div>
 
 
-	<div id="footer" class="row">
+	<div id="footer" class="row form-group">
 		<div class="col-md-4"></div>
 		<div>
 			<a href="{{route('home')}}" class="btn btn-warning">Quay lại <span class="glyphicon glyphicon-arrow-left"></a>
 			<a href="{{route('doc.edit',['id'=>$id])}}" class="btn btn-info">Chỉnh sửa <span class="glyphicon glyphicon-edit"></a>
 			<a href="{{asset('word/exports/'.$data['ten_tep'])}}" download class="btn btn-success">Tải về tệp Doc <span class="glyphicon glyphicon-export"></a>
+			<a href="" download class="btn btn-danger">Thêm mới thông tin nhân viên <span class="glyphicon glyphicon-plus"></a>
 		</div>
 	</div>
 </form>

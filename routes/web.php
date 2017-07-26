@@ -35,11 +35,21 @@ Route::get('export-excel-m1d','ExportExcelController@index_d')->name('excel.inde
 Route::post('export-excel-m1d','ExportExcelController@post_d')->name('excel.postD');
 Route::get('do-export-excel-m1d','ExportExcelController@export_m1d')->name('excel.exportD');
 Route::get('test','ExportExcelController@test');
+//Word
 Route::get('company-info','ExportFileController@index');
 Route::post('company-info','ExportFileController@export_company_info');
 Route::get('company-info-preview/{id}','ExportFileController@word_preview')->name('word.companyPreview');
 Route::get('company-info-list','ExportFileController@list_word');
 Route::get('company-info-convert-doc','ExportFileController@export_company_info1')->name('doc.convert');
-// Route::get('employee-info','ExportFileController@index2');
 Route::get('company-info-edit/{id}','ExportFileController@edit')->name('doc.edit');
 Route::post('company-info-edit/{id}','ExportFileController@update')->name('doc.update');
+Route::get('company-info-delete/{id}','ExportFileController@delete')->name('doc.delete');
+// Excel
+Route::get('employee-info/{company_id?}','ExcelExportFileController@index')->name('excel.index');
+Route::post('employee-info/{company_id?}','ExcelExportFileController@create')->name('excel.create');
+Route::get('employee-info-export/{company_id?}','ExcelExportFileController@export')->name('excel.export');
+Route::get('employee-info-list/{company_id?}','ExcelExportFileController@listView')->name('excel.list');
+Route::get('employee-info-preview/{id?}','ExcelExportFileController@preview')->name('excel.preview');
+Route::get('employee-info-edit/{id?}','ExcelExportFileController@edit')->name('excel.edit');
+Route::post('employee-info-edit/{id?}','ExcelExportFileController@update')->name('excel.update');
+Route::get('employee-info-delete/{id?}','ExcelExportFileController@delete')->name('excel.delete');

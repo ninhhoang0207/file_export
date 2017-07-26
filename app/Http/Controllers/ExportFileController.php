@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\WordModel;
+use App\ExcelModel;
 use Carbon\Carbon;
+use Redirect;
 
 class ExportFileController extends Controller
 {
@@ -549,6 +551,12 @@ class ExportFileController extends Controller
 		return view('fontend.exports.show_word',compact(['data','id']));
 	}
 
+	public function delete($id = -1) {
+		$delete_excel = ExcelModel::where('company_id',$id)->delete();
+		$delete = WordModel::where('id',$id)->delete();
+		return Redirect::back();
+	}
+
 	public function selected_filed() {
 		return [
            'trungtam',
@@ -622,7 +630,7 @@ class ExportFileController extends Controller
 		];
 	}
 
-	private function convert_vi_to_en($str) {
+	public function convert_vi_to_en($str) {
 		$str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/", "a", $str);
 		$str = preg_replace("/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/", "e", $str);
 		$str = preg_replace("/(ì|í|ị|ỉ|ĩ)/", "i", $str);
